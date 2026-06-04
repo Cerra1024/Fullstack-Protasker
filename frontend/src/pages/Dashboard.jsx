@@ -122,7 +122,10 @@ async function handleUpdateProject(e) {
     <main className="main-content">
       <h1>Welcome, {user?.username}!</h1>
 
-      <form onSubmit={handleCreateProject}>
+      <form
+      className="project-form"
+      onSubmit={handleCreateProject}
+      >
       <h2>Create Project</h2>
 
       <input
@@ -153,12 +156,15 @@ async function handleUpdateProject(e) {
       {projects.length === 0 ? (
         <p>No projects yet.</p>
       ) : (
-        <ul>
+        <ul className="project-list">
           {projects.map((project) => (
-    <li key={project._id}>
-  {editingProjectId === project._id ? (
-    <form onSubmit={handleUpdateProject}>
-      <input
+      <li
+      key={project._id}
+      className="project-card"
+      >
+    {editingProjectId === project._id ? (
+      <form onSubmit={handleUpdateProject}>
+        <input
         type="text"
         value={editName}
         onChange={(e) => setEditName(e.target.value)}

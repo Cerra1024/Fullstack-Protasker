@@ -29,3 +29,56 @@
   padding: 2rem;
   background: #f8fafc;
 }
+
+.project-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.project-form input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.project-form button {
+  background: #4f46e5;
+  color: white;
+}
+
+.project-list {
+  list-style: none;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+  gap: 1rem;
+}
+
+.project-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.project-card h3 {
+  margin-bottom: 0.5rem;
+}
+
+.project-card p {
+  margin-bottom: 1rem;
+  color: #64748b;
+}
+
+.project-card button {
+  margin-right: 0.5rem;
+}
