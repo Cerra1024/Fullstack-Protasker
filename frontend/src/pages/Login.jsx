@@ -1,3 +1,76 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../services/api";
+import { useAuth } from "../context/AuthContext";
+
 export default function Login() {
-  return <h1>Login Page</h1>;
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState("");
+
+  function handleChange(e) {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await api.post("/users/login", formData);
+
+      login(response.data.user, response.data.token);
+
+      navigate("/dashboard");
+    } catch (error) {
+      setError(error.response?.data?.message || "Login failed");
+    }
+  }
+
+  return (
+    <main>
+      <h1>Login</h1>
+
+      <form onSubmit={handleSubmit}>
+        <label>
+          Email
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </label>
+
+        <label>
+          Password
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </label>
+
+        <button type="submit">Login</button>
+      </form>
+
+      {error && <p>{error}</p>}
+
+      <p>
+        Need an account? <Link to="/register">Register</Link>
+      </p>
+    </main>
+  );
 }
