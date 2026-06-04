@@ -3,15 +3,20 @@ import { Link, useParams } from "react-router-dom";
 import api from "../services/api";
 
 export default function ProjectDetails() {
-  const { id } = useParams();
+const { id } = useParams();
 
-  const [project, setProject] = useState(null);
-  const [tasks, setTasks] = useState([]);
-  const [error, setError] = useState("");
+ const [project, setProject] = useState(null);
+ const [tasks, setTasks] = useState([]);
+ const [error, setError] = useState("");
 
  const [title, setTitle] = useState("");
  const [description, setDescription] = useState("");
  const [status, setStatus] = useState("To Do");
+
+ const [editingTaskId, setEditingTaskId] = useState(null);
+ const [editTaskTitle, setEditTaskTitle] = useState("");
+ const [editTaskDescription, setEditTaskDescription] = useState("");
+
 
   useEffect(() => {
     async function fetchProjectData() {
@@ -76,6 +81,40 @@ async function handleUpdateTaskStatus(taskId, newStatus) {
     setError("Failed to update task");
   }
 }
+
+    function startEditingTask(task) {
+    setEditingTaskId(task._id);
+    setEditTaskTitle(task.title);
+    setEditTaskDescription(task.description);
+    }
+
+    function cancelEditingTask() {
+    setEditingTaskId(null);
+    setEditTaskTitle("");
+    setEditTaskDescription("");
+    }
+
+    async function handleUpdateTask(e) {
+    e.preventDefault();
+
+    try {
+        const response = await api.put(`/tasks/${editingTaskId}`, {
+        title: editTaskTitle,
+        description: editTaskDescription,
+        });
+
+        setTasks(
+        tasks.map((task) =>
+            task._id === editingTaskId ? response.data : task
+        )
+        );
+
+        cancelEditingTask();
+    } catch (error) {
+        setError("Failed to update task");
+    }
+    }
+
 
   if (error) {
     return (
@@ -143,28 +182,57 @@ async function handleUpdateTaskStatus(taskId, newStatus) {
           <ul>
             {tasks.map((task) => (
              <li key={task._id}>
-                 <h3>{task.title}</h3>
+    {editingTaskId === task._id ? (
+        <form onSubmit={handleUpdateTask}>
+        <input
+            type="text"
+            value={editTaskTitle}
+            onChange={(e) => setEditTaskTitle(e.target.value)}
+            required
+        />
 
-               <p>{task.description}</p>
+        <input
+            type="text"
+            value={editTaskDescription}
+            onChange={(e) => setEditTaskDescription(e.target.value)}
+            required
+        />
 
-               <label>
-                 Status:
-                    <select
-                     value={task.status}
-                     onChange={(e) =>
-                     handleUpdateTaskStatus(task._id, e.target.value)
-                    }
-                 >
-                <option value="To Do">To Do</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Done">Done</option>
-             </select>
+        <button type="submit">Save Task</button>
+
+        <button type="button" onClick={cancelEditingTask}>
+            Cancel
+        </button>
+        </form>
+    ) : (
+        <>
+        <h3>{task.title}</h3>
+        <p>{task.description}</p>
+
+        <label>
+            Status:
+            <select
+            value={task.status}
+            onChange={(e) =>
+                handleUpdateTaskStatus(task._id, e.target.value)
+            }
+            >
+            <option value="To Do">To Do</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
+            </select>
         </label>
 
-            <button onClick={() => handleDeleteTask(task._id)}>
-             Delete Task
-             </button>
-            </li>
+        <button onClick={() => startEditingTask(task)}>
+            Edit Task
+        </button>
+
+                <button onClick={() => handleDeleteTask(task._id)}>
+                    Delete Task
+                </button>
+                </>
+            )}
+        </li>
             ))}
           </ul>
         )}
