@@ -1,3 +1,15 @@
+import { useParams } from "react-router-dom";
+
 export default function ProjectDetails() {
-  return <h1>Project Details</h1>;
+  const { id } = useParams();
+
+  return (
+    <main>
+      <h1>Project Details</h1>
+
+      <p>Project ID:</p>
+
+      <p>{id}</p>
+    </main>
+  );
 }
