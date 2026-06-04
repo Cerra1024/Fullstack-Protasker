@@ -61,6 +61,22 @@ async function handleDeleteTask(taskId) {
   }
 }
 
+async function handleUpdateTaskStatus(taskId, newStatus) {
+  try {
+    const response = await api.put(`/tasks/${taskId}`, {
+      status: newStatus,
+    });
+
+    setTasks(
+      tasks.map((task) =>
+        task._id === taskId ? response.data : task
+      )
+    );
+  } catch (error) {
+    setError("Failed to update task");
+  }
+}
+
   if (error) {
     return (
       <main>
@@ -131,7 +147,19 @@ async function handleDeleteTask(taskId) {
 
                <p>{task.description}</p>
 
-               <p>Status: {task.status}</p>
+               <label>
+                 Status:
+                    <select
+                     value={task.status}
+                     onChange={(e) =>
+                     handleUpdateTaskStatus(task._id, e.target.value)
+                    }
+                 >
+                <option value="To Do">To Do</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+             </select>
+        </label>
 
             <button onClick={() => handleDeleteTask(task._id)}>
              Delete Task
