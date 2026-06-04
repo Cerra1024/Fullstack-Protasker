@@ -14,8 +14,12 @@ export default function Dashboard() {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
 
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
+  const [editingProjectId, setEditingProjectId] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [editDescription, setEditDescription] = useState("");
 
   useEffect(() => {
     async function fetchProjects() {
@@ -62,6 +66,40 @@ async function handleDeleteProject(projectId) {
   }
 }
 
+function startEditing(project) {
+  setEditingProjectId(project._id);
+  setEditName(project.name);
+  setEditDescription(project.description);
+}
+
+function cancelEditing() {
+  setEditingProjectId(null);
+  setEditName("");
+  setEditDescription("");
+}
+
+async function handleUpdateProject(e) {
+  e.preventDefault();
+
+  try {
+    const response = await api.put(`/projects/${editingProjectId}`, {
+      name: editName,
+      description: editDescription,
+    });
+
+    setProjects(
+      projects.map((project) =>
+        project._id === editingProjectId ? response.data : project
+      )
+    );
+
+    cancelEditing();
+  } catch (error) {
+    setError("Failed to update project");
+  }
+}
+
+
   return (
   <main>
     <h1>Welcome, {user?.username}!</h1>
@@ -104,20 +142,46 @@ async function handleDeleteProject(projectId) {
         <ul>
           {projects.map((project) => (
     <li key={project._id}>
-       <Link to={`/projects/${project._id}`}>
-       <h3>{project.name}</h3>
-    </Link>
+  {editingProjectId === project._id ? (
+    <form onSubmit={handleUpdateProject}>
+      <input
+        type="text"
+        value={editName}
+        onChange={(e) => setEditName(e.target.value)}
+        required
+      />
 
-    <p>{project.description}</p>
+      <input
+        type="text"
+        value={editDescription}
+        onChange={(e) => setEditDescription(e.target.value)}
+        required
+      />
 
-    <button
-      onClick={() =>
-      handleDeleteProject(project._id)
-      }
-     >
-     Delete Project
-     </button>
-     </li>
+      <button type="submit">Save</button>
+
+      <button type="button" onClick={cancelEditing}>
+        Cancel
+      </button>
+    </form>
+      ) : (
+      <>
+      <Link to={`/projects/${project._id}`}>
+        <h3>{project.name}</h3>
+      </Link>
+
+      <p>{project.description}</p>
+
+      <button onClick={() => startEditing(project)}>
+        Edit Project
+      </button>
+
+      <button onClick={() => handleDeleteProject(project._id)}>
+        Delete Project
+      </button>
+      </>
+     )}
+    </li>
       ))}
         </ul>
       )}
