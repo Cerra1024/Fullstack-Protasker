@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  function handleLogout() {
+  logout();
+  navigate("/login");
+  }
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
 
@@ -42,6 +50,11 @@ export default function Dashboard() {
 
   return (
   <main>
+    <h1>Welcome, {user?.username}!</h1>
+
+    <button onClick={handleLogout}>
+    Logout
+    </button>
 
     <form onSubmit={handleCreateProject}>
       <h2>Create Project</h2>
