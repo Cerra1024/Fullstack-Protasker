@@ -5,6 +5,9 @@ export default function Dashboard() {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
 
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+
   useEffect(() => {
     async function fetchProjects() {
       try {
@@ -18,9 +21,52 @@ export default function Dashboard() {
     fetchProjects();
   }, []);
 
+  async function handleCreateProject(e) {
+  e.preventDefault();
+
+  try {
+    const response = await api.post("/projects", {
+      name,
+      description,
+    });
+
+    setProjects([...projects, response.data]);
+
+    setName("");
+    setDescription("");
+  } catch (error) {
+    setError("Failed to create project");
+  }
+}
+
   return (
-    <main>
-      <h1>My Projects</h1>
+  <main>
+
+    <form onSubmit={handleCreateProject}>
+      <h2>Create Project</h2>
+
+      <input
+        type="text"
+        placeholder="Project Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+
+      <input
+        type="text"
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        required
+      />
+
+      <button type="submit">
+        Create Project
+      </button>
+    </form>
+
+    <h1>My Projects</h1>
 
       {error && <p>{error}</p>}
 
