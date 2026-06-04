@@ -9,6 +9,10 @@ export default function ProjectDetails() {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
 
+ const [title, setTitle] = useState("");
+ const [description, setDescription] = useState("");
+ const [status, setStatus] = useState("To Do");
+
   useEffect(() => {
     async function fetchProjectData() {
       try {
@@ -26,6 +30,26 @@ export default function ProjectDetails() {
 
     fetchProjectData();
   }, [id]);
+
+  async function handleCreateTask(e) {
+  e.preventDefault();
+
+  try {
+    const response = await api.post(`/tasks/projects/${id}/tasks`, {
+      title,
+      description,
+      status,
+    });
+
+    setTasks([...tasks, response.data]);
+
+    setTitle("");
+    setDescription("");
+    setStatus("To Do");
+  } catch (error) {
+    setError("Failed to create task");
+  }
+}
 
   if (error) {
     return (
@@ -56,6 +80,36 @@ export default function ProjectDetails() {
 
       <section>
         <h2>Tasks</h2>
+        <form onSubmit={handleCreateTask}>
+  <h3>Create Task</h3>
+
+  <input
+    type="text"
+    placeholder="Task title"
+    value={title}
+    onChange={(e) => setTitle(e.target.value)}
+    required
+  />
+
+  <input
+    type="text"
+    placeholder="Task description"
+    value={description}
+    onChange={(e) => setDescription(e.target.value)}
+    required
+  />
+
+  <select
+    value={status}
+    onChange={(e) => setStatus(e.target.value)}
+  >
+    <option value="To Do">To Do</option>
+    <option value="In Progress">In Progress</option>
+    <option value="Done">Done</option>
+  </select>
+
+  <button type="submit">Create Task</button>
+  </form>
 
         {tasks.length === 0 ? (
           <p>No tasks yet.</p>
