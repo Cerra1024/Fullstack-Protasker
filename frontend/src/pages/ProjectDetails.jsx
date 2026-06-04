@@ -51,6 +51,16 @@ export default function ProjectDetails() {
   }
 }
 
+async function handleDeleteTask(taskId) {
+  try {
+    await api.delete(`/tasks/${taskId}`);
+
+    setTasks(tasks.filter((task) => task._id !== taskId));
+  } catch (error) {
+    setError("Failed to delete task");
+  }
+}
+
   if (error) {
     return (
       <main>
@@ -116,13 +126,17 @@ export default function ProjectDetails() {
         ) : (
           <ul>
             {tasks.map((task) => (
-              <li key={task._id}>
-                <h3>{task.title}</h3>
+             <li key={task._id}>
+                 <h3>{task.title}</h3>
 
-                <p>{task.description}</p>
+               <p>{task.description}</p>
 
-                <p>Status: {task.status}</p>
-              </li>
+               <p>Status: {task.status}</p>
+
+            <button onClick={() => handleDeleteTask(task._id)}>
+             Delete Task
+             </button>
+            </li>
             ))}
           </ul>
         )}
