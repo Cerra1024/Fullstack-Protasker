@@ -48,6 +48,20 @@ export default function Dashboard() {
   }
 }
 
+async function handleDeleteProject(projectId) {
+  try {
+    await api.delete(`/projects/${projectId}`);
+
+    setProjects(
+      projects.filter(
+        (project) => project._id !== projectId
+      )
+    );
+  } catch (error) {
+    setError("Failed to delete project");
+  }
+}
+
   return (
   <main>
     <h1>Welcome, {user?.username}!</h1>
@@ -90,12 +104,21 @@ export default function Dashboard() {
         <ul>
           {projects.map((project) => (
     <li key={project._id}>
-        <Link to={`/projects/${project._id}`}>
-        <h3>{project.name}</h3>
-        </Link>
-         <p>{project.description}</p>
-    </li>
-          ))}
+       <Link to={`/projects/${project._id}`}>
+       <h3>{project.name}</h3>
+    </Link>
+
+    <p>{project.description}</p>
+
+    <button
+      onClick={() =>
+      handleDeleteProject(project._id)
+      }
+     >
+     Delete Project
+     </button>
+     </li>
+      ))}
         </ul>
       )}
     </main>
