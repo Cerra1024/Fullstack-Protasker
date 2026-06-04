@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
+import "./Dashboard.css";
+
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -101,14 +103,26 @@ async function handleUpdateProject(e) {
 
 
   return (
-  <main>
-    <h1>Welcome, {user?.username}!</h1>
+  <div className="dashboard-layout">
 
-    <button onClick={handleLogout}>
-    Logout
-    </button>
+    <aside className="sidebar">
+      <h2>Pro-Tasker</h2>
 
-    <form onSubmit={handleCreateProject}>
+      <nav className="sidebar-nav">
+        <span>Dashboard</span>
+        <span>Projects</span>
+        <span>Tasks</span>
+      </nav>
+
+      <button onClick={handleLogout}>
+        Logout
+      </button>
+    </aside>
+
+    <main className="main-content">
+      <h1>Welcome, {user?.username}!</h1>
+
+      <form onSubmit={handleCreateProject}>
       <h2>Create Project</h2>
 
       <input
@@ -185,6 +199,9 @@ async function handleUpdateProject(e) {
       ))}
         </ul>
       )}
-    </main>
+        </main>
+
+  </div>
   );
 }
+
