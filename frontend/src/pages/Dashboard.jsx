@@ -120,7 +120,32 @@ async function handleUpdateProject(e) {
     </aside>
 
     <main className="main-content">
-      <h1>Welcome, {user?.username}!</h1>
+      <div className="page-header">
+         <div>
+            <h1>Good morning, {user?.username}! 👋</h1>
+            <p>Here's what's happening with your projects today.</p>
+          </div>
+       </div>
+
+      <section className="stats-grid">
+      <div className="stat-card">
+        <span>📁</span>
+        <h3>{projects.length}</h3>
+        <p>Projects</p>
+      </div>
+
+      <div className="stat-card">
+        <span>✅</span>
+        <h3>--</h3>
+        <p>Tasks</p>
+      </div>
+
+      <div className="stat-card">
+        <span>🎯</span>
+        <h3>--</h3>
+        <p>Completed</p>
+      </div>
+    </section>
 
       <form
       className="project-form"
