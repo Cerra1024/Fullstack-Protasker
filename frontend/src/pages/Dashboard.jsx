@@ -16,6 +16,12 @@ export default function Dashboard() {
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
 
+  const [totalTasks, setTotalTasks] = useState(0);
+  const [completedTasks, setCompletedTasks] = useState(0);
+  const [todoTasks, setTodoTasks] = useState(0);
+  const [inProgressTasks, setInProgressTasks] = useState(0);
+  const [overdueTasks, setOverdueTasks] = useState(0);
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -44,11 +50,32 @@ export default function Dashboard() {
             ...project,
             totalTasks,
             completedTasks,
+            tasks: taskResponse.data,
           };
         })
       );
 
       setProjects(projectsWithTasks);
+
+      const allTasks = projectsWithTasks.flatMap(
+          (project) => project.tasks || []
+        );
+
+        setTotalTasks(allTasks.length);
+
+        setCompletedTasks(
+          allTasks.filter((task) => task.status === "Done").length
+        );
+
+        setTodoTasks(
+          allTasks.filter((task) => task.status === "To Do").length
+        );
+
+        setInProgressTasks(
+          allTasks.filter((task) => task.status === "In Progress").length
+        );
+
+        setOverdueTasks(0);
     } catch (error) {
       setError("Failed to load projects");
     }
@@ -157,17 +184,18 @@ async function handleUpdateProject(e) {
 
       <div className="stat-card">
         <span>✅</span>
-        <h3>--</h3>
+        <h3>{totalTasks}</h3>
         <p>Tasks</p>
       </div>
 
       <div className="stat-card">
         <span>🎯</span>
-        <h3>--</h3>
+        <h3>{completedTasks}</h3>
         <p>Completed</p>
       </div>
     </section>
 
+    <section className="dashboard-grid">
       <form
       className="project-form"
       onSubmit={handleCreateProject}
@@ -194,6 +222,41 @@ async function handleUpdateProject(e) {
         Create Project
       </button>
     </form>
+
+    <section className="task-overview-card">
+    <h2>Task Overview</h2>
+
+    <div className="overview-content">
+    <div className="donut-chart"></div>
+
+    <div className="overview-list">
+      <p>
+        <span className="dot todo"></span>
+        To Do
+        <strong>{todoTasks}</strong>
+      </p>
+
+      <p>
+        <span className="dot progress"></span>
+        In Progress
+        <strong>{inProgressTasks}</strong>
+      </p>
+
+      <p>
+        <span className="dot done"></span>
+        Completed
+        <strong>{completedTasks}</strong>
+      </p>
+
+      <p>
+        <span className="dot overdue"></span>
+        Overdue
+        <strong>{overdueTasks}</strong>
+      </p>
+    </div>
+  </div>
+</section>
+</section>
 
     <h1>Project Workspace</h1>
 
