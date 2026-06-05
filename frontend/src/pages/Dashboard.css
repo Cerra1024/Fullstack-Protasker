@@ -303,3 +303,16 @@
   background: #ef4444;
 }
 
+.sidebar-nav a {
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar-nav a:hover {
+  color: #c7d2fe;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+

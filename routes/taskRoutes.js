@@ -23,12 +23,14 @@ router.post("/projects/:projectId/tasks", protect, async (req, res) => {
       });
     }
 
-    const { title, description, status } = req.body;
+    const { title, description, status, priority, dueDate } = req.body;
 
     const task = await Task.create({
       title,
       description,
       status,
+      priority,
+      dueDate,
       project: project._id,
     });
 
@@ -97,6 +99,8 @@ router.put("/:taskId", protect, async (req, res) => {
     task.title = req.body.title || task.title;
     task.description = req.body.description || task.description;
     task.status = req.body.status || task.status;
+    task.priority = req.body.priority || task.priority;
+    task.dueDate = req.body.dueDate || task.dueDate;
 
     const updatedTask = await task.save();
 

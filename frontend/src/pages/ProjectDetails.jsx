@@ -140,7 +140,14 @@ export default function ProjectDetails() {
  (task) => task.status === "In Progress"
  ).length;
  const doneCount = tasks.filter((task) => task.status === "Done").length;
- const overdueCount = 0;
+ const overdueCount = tasks.filter((task) => {
+  if (!task.dueDate) return false;
+
+  return (
+    new Date(task.dueDate) < new Date() &&
+    task.status !== "Done"
+  );
+}).length;
 
   return (
     <main>
@@ -264,22 +271,28 @@ export default function ProjectDetails() {
                   </form>
                 ) : (
                   <>
+                 <div className="task-main">
                     <h3>{task.title}</h3>
                     <p>{task.description}</p>
+                    </div>
 
-                     <p>
-                        <strong>Priority:</strong> {task.priority || "Medium"}
-                     </p>
+                    <div className="task-meta">
+                    <span
+                        className={`priority-badge ${
+                        task.priority?.toLowerCase() || "medium"
+                        }`}
+                    >
+                        {task.priority || "Medium"}
+                    </span>
 
-                     <p>
-                        <strong>Due:</strong>{" "}
+                    <span className="due-date">
+                        Due:{" "}
                         {task.dueDate
-                            ? new Date(task.dueDate).toLocaleDateString()
-                            : "No due date"}
-                      </p>
+                        ? new Date(task.dueDate).toLocaleDateString()
+                        : "No due date"}
+                    </span>
 
-                    <label>
-                      Status:
+                    <label className="status-control">
                       <select
                         value={task.status}
                         onChange={(e) =>
@@ -292,14 +305,25 @@ export default function ProjectDetails() {
                       </select>
                     </label>
 
-                    <button onClick={() => startEditingTask(task)}>
-                      Edit Task
-                    </button>
+                    <div className="task-actions">
+                      <button
+                        className="icon-button edit-icon"
+                        onClick={() => startEditingTask(task)}
+                        aria-label="Edit task"
+                      >
+                        ✏️
+                      </button>
 
-                    <button onClick={() => handleDeleteTask(task._id)}>
-                      Delete Task
-                    </button>
-                  </>
+                      <button
+                        className="icon-button delete-icon"
+                        onClick={() => handleDeleteTask(task._id)}
+                        aria-label="Delete task"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                </>
                 )}
               </li>
             ))}

@@ -75,7 +75,16 @@ export default function Dashboard() {
           allTasks.filter((task) => task.status === "In Progress").length
         );
 
-        setOverdueTasks(0);
+        setOverdueTasks(
+          allTasks.filter((task) => {
+            if (!task.dueDate) return false;
+
+            return (
+              new Date(task.dueDate) < new Date() &&
+              task.status !== "Done"
+            );
+          }).length
+        );
     } catch (error) {
       setError("Failed to load projects");
     }
@@ -157,9 +166,9 @@ async function handleUpdateProject(e) {
       <h2>Pro-Tasker</h2>
 
       <nav className="sidebar-nav">
-        <span>Dashboard</span>
-        <span>Projects</span>
-        <span>Tasks</span>
+        <a href="#top">Dashboard</a>
+        <a href="#projects">Projects</a>
+        <a href="#tasks">Tasks</a>
       </nav>
 
       <button onClick={handleLogout}>
@@ -167,7 +176,7 @@ async function handleUpdateProject(e) {
       </button>
     </aside>
 
-    <main className="main-content">
+    <main className="main-content" id="top">
       <div className="page-header">
          <div>
             <h1>Good morning, {user?.username}! 👋</h1>
@@ -223,7 +232,7 @@ async function handleUpdateProject(e) {
       </button>
     </form>
 
-    <section className="task-overview-card">
+    <section className="task-overview-card" id="tasks">
     <h2>Task Overview</h2>
 
     <div className="overview-content">
@@ -258,7 +267,7 @@ async function handleUpdateProject(e) {
 </section>
 </section>
 
-    <h1>Project Workspace</h1>
+    <h1 id="projects">Project Workspace</h1>
 
       {error && <p>{error}</p>}
 

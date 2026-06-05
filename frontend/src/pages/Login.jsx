@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import "./Login.css";
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -37,10 +39,12 @@ export default function Login() {
   }
 
   return (
-    <main>
-      <h1>Login</h1>
+  <main className="login-page">
+    <div className="login-card">
+      <h1>Welcome Back</h1>
+      <p className="login-subtitle">Sign in to manage your projects and tasks.</p>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="login-form">
         <label>
           Email
           <input
@@ -66,11 +70,12 @@ export default function Login() {
         <button type="submit">Login</button>
       </form>
 
-      {error && <p>{error}</p>}
+      {error && <p className="error">{error}</p>}
 
-      <p>
+      <p className="register-link">
         Need an account? <Link to="/register">Register</Link>
       </p>
-    </main>
-  );
+    </div>
+  </main>
+);
 }

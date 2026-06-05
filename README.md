@@ -83,21 +83,8 @@ The application demonstrates authentication, authorization, CRUD operations, Mon
 
 ---
 
-## Authentication
-
-Protected routes require a JWT token.
-
-Example Authorization header:
-
-```text
-Authorization: Bearer <token>
-```
-
----
-
 ## Database Relationships
 
-```text
 User
  └── Projects
       └── Tasks
@@ -105,15 +92,11 @@ User
 
 Each project belongs to a user, and each task belongs to a project.
 
-
 ---
 
 ## Future Improvements
-
-* Task due dates
-* Task priorities
-* Search and filtering
-
+* Task filtering
+* Collaberation
 
 ---
 

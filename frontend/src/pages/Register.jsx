@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import "./Register.css";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -38,10 +39,59 @@ export default function Register() {
   }
 
   return (
-    <main>
-      <h1>Create Account</h1>
+  <main className="login-page">
 
-      <form onSubmit={handleSubmit}>
+    <div className="bg-icon icon-1">📁</div>
+    <div className="bg-icon icon-2">📋</div>
+    <div className="bg-icon icon-3">📊</div>
+    <div className="bg-icon icon-4">✅</div>
+    <div className="bg-icon icon-5">📅</div>
+    <div className="bg-icon icon-6">🎯</div>
+    <div className="bg-icon icon-7">📁</div>
+    <div className="bg-icon icon-8">📋</div>
+
+    <div className="feature-panel">
+      <h1>
+        Stay Organized.
+        <br />
+        Stay Focused.
+        <br />
+        <span>Get Things Done.</span>
+      </h1>
+
+      <p>
+        Pro-Tasker helps you manage projects, track progress,
+        and achieve more every day.
+      </p>
+
+      <div className="feature-item">
+        📁 Organize Projects
+      </div>
+
+      <div className="feature-item">
+        ✅ Track Task Progress
+      </div>
+
+      <div className="feature-item">
+        📅 Manage Due Dates
+      </div>
+
+      <div className="feature-item">
+        📊 Visualize Success
+      </div>
+
+      <div className="floating-graphic">
+        📋
+      </div>
+    </div>
+
+    <div className="login-card">
+      <h1>Create Account</h1>
+      <p className="login-subtitle">
+        Sign up to start managing projects and tasks.
+      </p>
+
+      <form onSubmit={handleSubmit} className="login-form">
         <label>
           Username
           <input
@@ -78,12 +128,13 @@ export default function Register() {
         <button type="submit">Register</button>
       </form>
 
-      {message && <p>{message}</p>}
-      {error && <p>{error}</p>}
+      {message && <p className="success">{message}</p>}
+      {error && <p className="error">{error}</p>}
 
-      <p>
+      <p className="register-link">
         Already have an account? <Link to="/login">Login</Link>
       </p>
-    </main>
-  );
+    </div>
+  </main>
+);
 }
