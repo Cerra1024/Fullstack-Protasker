@@ -41,3 +41,40 @@
   padding: 1.5rem;
   border-radius: 16px;
 }
+
+.task-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.task-summary-card {
+  height: 90px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1rem;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+}
+
+.task-summary-card span {
+  font-size: 1.4rem;
+}
+
+.task-summary-card h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #0f172a;
+}
+
+.task-summary-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}

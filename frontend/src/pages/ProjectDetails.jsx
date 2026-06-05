@@ -14,6 +14,9 @@ export default function ProjectDetails() {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("To Do");
 
+  const [priority, setPriority] = useState("Medium");
+  const [dueDate, setDueDate] = useState("");
+
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editTaskTitle, setEditTaskTitle] = useState("");
   const [editTaskDescription, setEditTaskDescription] = useState("");
@@ -42,12 +45,16 @@ export default function ProjectDetails() {
         title,
         description,
         status,
-      });
+        priority,
+        dueDate,
+        });
 
       setTasks([...tasks, response.data]);
       setTitle("");
       setDescription("");
       setStatus("To Do");
+      setPriority("Medium");
+      setDueDate("");
     } catch (error) {
       setError("Failed to create task");
     }
@@ -128,12 +135,53 @@ export default function ProjectDetails() {
     );
   }
 
+  const todoCount = tasks.filter((task) => task.status === "To Do").length;
+  const inProgressCount = tasks.filter(
+ (task) => task.status === "In Progress"
+ ).length;
+ const doneCount = tasks.filter((task) => task.status === "Done").length;
+ const overdueCount = 0;
+
   return (
     <main>
       <Link to="/dashboard">← Back to Dashboard</Link>
 
       <h1>{project.name}</h1>
       <p>{project.description}</p>
+
+<section className="task-summary-grid">
+    <div className="task-summary-card todo-card">
+        <span>🔵</span>
+        <div>
+        <h3>{todoCount}</h3>
+        <p>To Do</p>
+        </div>
+    </div>
+
+    <div className="task-summary-card progress-card">
+        <span>🟡</span>
+        <div>
+        <h3>{inProgressCount}</h3>
+        <p>In Progress</p>
+        </div>
+    </div>
+
+    <div className="task-summary-card done-card">
+        <span>🟢</span>
+        <div>
+        <h3>{doneCount}</h3>
+        <p>Done</p>
+        </div>
+    </div>
+
+    <div className="task-summary-card overdue-card">
+        <span>🔴</span>
+        <div>
+        <h3>{overdueCount}</h3>
+        <p>Overdue</p>
+        </div>
+    </div>
+    </section>
 
       <section>
         <h2>Tasks</h2>
@@ -158,15 +206,30 @@ export default function ProjectDetails() {
           />
 
           <select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+         >
+            <option value="Low">Low Priority</option>
+            <option value="Medium">Medium Priority</option>
+            <option value="High">High Priority</option>
+            </select>
+
+            <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            />
+
+            <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-          >
+         >
             <option value="To Do">To Do</option>
             <option value="In Progress">In Progress</option>
             <option value="Done">Done</option>
-          </select>
+            </select>
 
-          <button type="submit">Create Task</button>
+            <button type="submit">Create Task</button>
         </form>
 
         {tasks.length === 0 ? (
@@ -203,6 +266,17 @@ export default function ProjectDetails() {
                   <>
                     <h3>{task.title}</h3>
                     <p>{task.description}</p>
+
+                     <p>
+                        <strong>Priority:</strong> {task.priority || "Medium"}
+                     </p>
+
+                     <p>
+                        <strong>Due:</strong>{" "}
+                        {task.dueDate
+                            ? new Date(task.dueDate).toLocaleDateString()
+                            : "No due date"}
+                      </p>
 
                     <label>
                       Status:
