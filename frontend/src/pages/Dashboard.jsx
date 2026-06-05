@@ -23,18 +23,39 @@ export default function Dashboard() {
   const [editName, setEditName] = useState("");
   const [editDescription, setEditDescription] = useState("");
 
-  useEffect(() => {
+    useEffect(() => {
     async function fetchProjects() {
-      try {
-        const response = await api.get("/projects");
-        setProjects(response.data);
-      } catch (error) {
-        setError("Failed to load projects");
-      }
-    }
+     try {
+      const response = await api.get("/projects");
 
-    fetchProjects();
-  }, []);
+      const projectsWithTasks = await Promise.all(
+        response.data.map(async (project) => {
+          const taskResponse = await api.get(
+            `/tasks/projects/${project._id}/tasks`
+          );
+
+          const totalTasks = taskResponse.data.length;
+
+          const completedTasks = taskResponse.data.filter(
+            (task) => task.status === "Done"
+          ).length;
+
+          return {
+            ...project,
+            totalTasks,
+            completedTasks,
+          };
+        })
+      );
+
+      setProjects(projectsWithTasks);
+    } catch (error) {
+      setError("Failed to load projects");
+    }
+  }
+
+  fetchProjects();
+}, []);
 
   async function handleCreateProject(e) {
   e.preventDefault();
@@ -210,21 +231,48 @@ async function handleUpdateProject(e) {
       </button>
     </form>
       ) : (
-      <>
-      <Link to={`/projects/${project._id}`}>
-        <h3>{project.name}</h3>
-      </Link>
+    <>
+    <Link to={`/projects/${project._id}`}>
+      <h3>{project.name}</h3>
+    </Link>
 
-      <p>{project.description}</p>
+    <p>{project.description}</p>
 
+    <div className="project-progress">
+      <p>
+        <strong>{project.completedTasks || 0}</strong> of{" "}
+        <strong>{project.totalTasks || 0}</strong> Tasks Completed
+      </p>
+
+      <div className="progress-bar">
+        <div
+          className="progress-fill"
+          style={{
+            width:
+              project.totalTasks > 0
+                ? `${(project.completedTasks / project.totalTasks) * 100}%`
+                : "0%",
+          }}
+        ></div>
+      </div>
+    </div>
+
+    <p className="last-updated">
+      📅 Last updated:{" "}
+      {new Date(project.updatedAt).toLocaleDateString()}
+    </p>
+
+    <div className="project-actions">
       <button onClick={() => startEditing(project)}>
-        Edit Project
+        ✏️ Edit
       </button>
 
       <button onClick={() => handleDeleteProject(project._id)}>
-        Delete Project
+        🗑 Delete
       </button>
-      </>
+    </div>
+  </>
+
      )}
     </li>
       ))}
