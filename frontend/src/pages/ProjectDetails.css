@@ -1,0 +1,43 @@
+.project-details-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.project-sidebar {
+  width: 240px;
+  padding: 2rem;
+  background: #1e293b;
+  color: white;
+}
+
+.project-sidebar h2 {
+  margin-bottom: 2rem;
+}
+
+.project-main {
+  flex: 1;
+  padding: 2rem;
+  background: #f8fafc;
+}
+
+.task-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin: 2rem 0;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.task-list {
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+
+.task-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+}

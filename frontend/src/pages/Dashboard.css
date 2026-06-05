@@ -82,3 +82,41 @@
 .project-card button {
   margin-right: 0.5rem;
 }
+
+.sidebar {
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar button {
+  width: 100%;
+  background: #ef4444;
+  color: white;
+  border-radius: 10px;
+}
+
+.sidebar button:hover {
+  opacity: 0.9;
+}
+
+.project-card button {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  color: white;
+}
+
+.project-card button:first-of-type {
+  background: #4f46e5;
+}
+
+.project-card button:last-of-type {
+  background: #ef4444;
+}
+
+.project-card a {
+  text-decoration: none;
+  color: #1e293b;
+}
+
+.project-card a:hover {
+  color: #4f46e5;
+}

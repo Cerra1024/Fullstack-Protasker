@@ -126,7 +126,7 @@ async function handleUpdateProject(e) {
       className="project-form"
       onSubmit={handleCreateProject}
       >
-      <h2>Create Project</h2>
+      <h2>Create New Project</h2>
 
       <input
         type="text"
@@ -149,7 +149,7 @@ async function handleUpdateProject(e) {
       </button>
     </form>
 
-    <h1>My Projects</h1>
+    <h1>Project Workspace</h1>
 
       {error && <p>{error}</p>}
 
