@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3001/api",
+  baseURL: "https://protasker-api-qvm7.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {
