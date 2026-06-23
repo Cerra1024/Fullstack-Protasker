@@ -16,6 +16,10 @@ app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/projects", require("./routes/projectRoutes"));
 app.use("/api/tasks", require("./routes/taskRoutes"));
 
+app.get("/", (req, res) => {
+  res.send("Pro-Tasker API is running");
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
